@@ -20,12 +20,6 @@ type MoveData = {
   to: number
 }
 
-type MoveCardToColumnProps = {
-  fromColumn: number
-  toColumn: number
-  from: number
-}
-
 export const initialItems = {
   'item-1': {
     id: 'item-1',
@@ -66,7 +60,6 @@ const initialData = [
 type KanbanContextData = {
   columns: ColumnType[]
   move: (data: MoveData) => void
-  moveCardToColumn: (data: MoveCardToColumnProps) => void
 }
 
 export const KanbanContext = createContext<KanbanContextData>(
@@ -83,7 +76,7 @@ export function KanbanContextProvider({
   const [columns, setColumns] = useState<ColumnType[]>(initialData)
 
   function move({ fromColumn, toColumn, from, to }: MoveData) {
-    // console.log('[MOVE]: ', { fromColumn, toColumn, from, to })
+    console.log('[MOVE]: ', { fromColumn, toColumn, from, to })
 
     setColumns((prevState) =>
       produce(prevState, (draft) => {
@@ -99,29 +92,8 @@ export function KanbanContextProvider({
     )
   }
 
-  function moveCardToColumn({
-    fromColumn,
-    toColumn,
-    from,
-  }: MoveCardToColumnProps) {
-    // console.log('[MOVE-TO-CARD]: ', { fromColumn, toColumn, from })
-
-    setColumns((prevState) =>
-      produce(prevState, (draft) => {
-        const dragged = draft[fromColumn].items[from]
-
-        if (!dragged) {
-          return
-        }
-
-        draft[fromColumn].items.splice(from, 1)
-        draft[toColumn].items.splice(draft[toColumn].items.length, 0, dragged)
-      }),
-    )
-  }
-
   return (
-    <KanbanContext.Provider value={{ columns, move, moveCardToColumn }}>
+    <KanbanContext.Provider value={{ columns, move }}>
       {children}
     </KanbanContext.Provider>
   )

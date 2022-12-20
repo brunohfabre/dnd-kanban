@@ -1,7 +1,6 @@
 import { useContext } from 'react'
 import { useDrop } from 'react-dnd'
 
-import { Card } from '@siakit/card'
 import { Flex } from '@siakit/layout'
 import { Text } from '@siakit/text'
 
@@ -19,22 +18,24 @@ type HoverItemData = {
 }
 
 export function Column({ data, index: columnIndex }: ColumnProps) {
-  const { moveCardToColumn } = useContext(KanbanContext)
+  const { move } = useContext(KanbanContext)
 
   const [, dropRef] = useDrop({
     accept: 'CARD',
-    hover(item: HoverItemData, monitor) {
+    drop(item: HoverItemData) {
       if (item.columnIndex === columnIndex) {
         return
       }
 
-      moveCardToColumn({
+      move({
         fromColumn: item.columnIndex,
         toColumn: columnIndex,
         from: item.index,
+        to: data.items.length,
       })
 
       item.columnIndex = columnIndex
+      item.index = data.items.length
     },
   })
 
@@ -50,16 +51,11 @@ export function Column({ data, index: columnIndex }: ColumnProps) {
     >
       <Text>{data.title}</Text>
 
-      <Flex flex direction="column" gap={8} overflow>
+      <Flex flex direction="column" overflow>
         {data.items.map((item, index) => (
           <Item key={item} id={item} index={index} columnIndex={columnIndex} />
         ))}
-
-        <Card
-          ref={dropRef}
-          flex
-          css={{ backgroundColor: 'transparent', borderStyle: 'dashed' }}
-        />
+        <Flex ref={dropRef} flex />
       </Flex>
     </Flex>
   )

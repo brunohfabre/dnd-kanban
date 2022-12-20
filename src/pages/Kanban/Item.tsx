@@ -2,6 +2,7 @@ import { useContext, useRef } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
 import { Card } from '@siakit/card'
+import { Flex } from '@siakit/layout'
 import { Text } from '@siakit/text'
 
 import { initialItems, KanbanContext } from './context'
@@ -66,35 +67,37 @@ export function Item({ id, index, columnIndex }: ItemProps) {
         return
       }
 
+      item.index = targetIndex
+      item.columnIndex = targetColumnIndex
+
       move({
         fromColumn: draggedColumnIndex,
         toColumn: targetColumnIndex,
         from: draggedIndex,
         to: targetIndex,
       })
-
-      item.index = targetIndex
-      item.columnIndex = targetColumnIndex
     },
   })
 
   dragRef(dropRef(itemRef))
 
   return (
-    <Card
-      ref={itemRef}
-      padding={12}
-      css={
-        isDragging
-          ? {
-              borderStyle: 'dashed',
-              backgroundColor: 'transparent',
-              cursor: 'grabbing',
-            }
-          : {}
-      }
-    >
-      <Text>{card.content}</Text>
-    </Card>
+    <Flex ref={itemRef} padding="0 0 8px 0">
+      <Card
+        flex
+        padding={12}
+        css={
+          isDragging
+            ? {
+                borderStyle: 'dashed',
+                backgroundColor: 'transparent',
+                cursor: 'grabbing',
+              }
+            : {}
+        }
+      >
+        <Text>{card.content}</Text>
+      </Card>
+    </Flex>
   )
 }
