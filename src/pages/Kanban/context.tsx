@@ -89,6 +89,10 @@ export function KanbanContextProvider({
       produce(prevState, (draft) => {
         const dragged = draft[fromColumn].items[from]
 
+        if (!dragged) {
+          return
+        }
+
         draft[fromColumn].items.splice(from, 1)
         draft[toColumn].items.splice(to, 0, dragged)
       }),
@@ -105,6 +109,10 @@ export function KanbanContextProvider({
     setColumns((prevState) =>
       produce(prevState, (draft) => {
         const dragged = draft[fromColumn].items[from]
+
+        if (!dragged) {
+          return
+        }
 
         draft[fromColumn].items.splice(from, 1)
         draft[toColumn].items.splice(draft[toColumn].items.length, 0, dragged)
