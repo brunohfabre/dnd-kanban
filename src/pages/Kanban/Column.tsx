@@ -52,12 +52,7 @@ export function Column({ data, index: columnIndex }: ColumnProps) {
 
       <Flex flex direction="column" gap={8} overflow>
         {data.items.map((item, index) => (
-          <Item
-            key={item.id}
-            data={item}
-            index={index}
-            columnIndex={columnIndex}
-          />
+          <Item key={item} id={item} index={index} columnIndex={columnIndex} />
         ))}
 
         <Card

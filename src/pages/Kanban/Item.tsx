@@ -4,10 +4,10 @@ import { useDrag, useDrop } from 'react-dnd'
 import { Card } from '@siakit/card'
 import { Text } from '@siakit/text'
 
-import { ItemType, KanbanContext } from './context'
+import { initialItems, KanbanContext } from './context'
 
 type ItemProps = {
-  data: ItemType
+  id: string
   index: number
   columnIndex: number
 }
@@ -17,10 +17,12 @@ type HoverItemData = {
   columnIndex: number
 }
 
-export function Item({ data, index, columnIndex }: ItemProps) {
+export function Item({ id, index, columnIndex }: ItemProps) {
   const { move } = useContext(KanbanContext)
 
   const itemRef = useRef<HTMLDivElement>(null)
+
+  const card = initialItems[id]
 
   const [{ isDragging }, dragRef] = useDrag({
     type: 'CARD',
@@ -92,7 +94,7 @@ export function Item({ data, index, columnIndex }: ItemProps) {
           : {}
       }
     >
-      <Text>{data.content}</Text>
+      <Text>{card.content}</Text>
     </Card>
   )
 }
